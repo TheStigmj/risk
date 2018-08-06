@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+	{% block title %}<title>Risk</title>{% endblock %}
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	{% block scripts %}
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<!-- Custom Scroller Js CDN -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+  
+	<!-- Add additional CSS in static file -->
+	{% load static %}
+	<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+	<script src="{% static 'js/risk.js' %}"></script>
+	<!-- Scrollbar Custom CSS -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+	{% endblock %}
+</head>
+<body>
+	<nav class="navbar navbar-default navbar-fixed-top">
+	  <div class="container-fluid">
+		<div class="navbar-header">
+			<button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn">
+				<i class="glyphicon glyphicon-align-left"></i>
+				Toggle Sidebar
+			</button>
+		</div>
+		{% block customer_select %}{% if customer_selectform %}
+		<div class="navbar-header">
+			<script type="text/javascript">
+				$(function() {
+					$('#id_customer').change(function() {
+						this.form.submit();
+					});
+				})
+			</script>
+			<form action="" method="GET" class="navbar-form navbar-left">
+				{{ customer_selectform }}
+			</form>
+		</div>{% endif %}{% endblock %}
+		<p class="navbar-text navbar-right">{% if user.is_authenticated %}Signed in as <a href="{% url 'userprofile:index' %}">{{ user }}</a> (<a href="/accounts/logout/" class="navbar-link">logout</a>){% else %}<a href="/accounts/login/" class="navbar-link">LOGIN</a>{% endif %}</p>
+	  </div>
+	</nav>
+
+    <div class="wrapper">
+		<nav id="sidebar">
+			<div class="sidebar-header">
+				<h3>Risk</h3>
+			</div>
+			<ul class="list-unstyled components">
+				{% block sidebar %}
+				<li class="active"><a href="{% url 'index' %}">Home</a></li>
+				{% if user.is_authenticated %}<li><a href="{% url 'risk:index' %}{% if customer_selectform %}?customer={{ customer_id }}{% endif %}">Risks</a></li>{% endif %}
+				<li><a href="{% url 'advisory:index' %}">Advisories</a></li>
+				{% if user.is_authenticated %}<li><a href="{% url 'assessment:index' %}{% if customer_selectform %}?customer={{ customer_id }}{% endif %}">Assessments</a></li>{% endif %}
+				<li><a href="{% url 'product:index' %}">Products</a></li>
+				{% if user.is_authenticated %}<li><a href="{% url 'customer:index' %}">Customers</a></li>{% endif %}
+				{% if user.is_authenticated %}<li><a href="{% url 'watchlist:index' %}">Watchlist</a></li>{% endif %}
+				{% endblock %}
+			</ul>
+		</nav>
+		<div id="content">
+			{% block content %}{% endblock %}
+        </div>
+	</div>
+</body>
+</html>

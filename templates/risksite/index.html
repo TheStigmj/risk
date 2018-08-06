@@ -1,0 +1,19 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h1>Risk home</h1>
+
+  <p>Welcome to <em>Risk</em>, a tool for assessing risks.</p>
+
+<h2>Dynamic content</h2>
+
+  <p>We currently have the following record counts:</p>
+  <ul>
+    <li><strong>Advisories:</strong> {{ num_advisories }}</li>
+    <li><strong>Product categories:</strong> {{ num_products }}</li>{% if user.is_authenticated %}
+    <li><strong>Assessments:</strong> {{ num_assessments }}</li>
+    <li><strong>Customers:</strong> {{ num_customers }}</li>
+    <li><strong>Users:</strong> {{ num_users }}</li>{% endif %}
+  </ul>
+
+{% endblock %}

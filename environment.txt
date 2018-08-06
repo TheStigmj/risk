@@ -1,0 +1,3 @@
+environment
+
+pip install django-bootstrap3-datetimepicker-2

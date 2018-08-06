@@ -1,0 +1,31 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h1>{{ advisory.advisory_id }}</h1>
+<h2>Title</h2>
+<p>{{ advisory.advisory_title }}</p>
+<h2>First published</h2>
+<p>{{ advisory.first_published | date:"d.m.Y H:i:s" }}</p>
+<h2>Last updated</h2>
+<p>{{ advisory.last_updated | date:"d.m.Y H:i:s" }}</p>
+{% if bug_ids %}
+	<h2>Bugs</h2>
+    <ul>
+    {% for bug_id in bug_ids %}
+		<li><a href="https://bst.cloudapps.cisco.com/bugsearch/bug/{{ bug_id }}">{{ bug_id }}</a></li>
+    {% endfor %}
+    </ul>
+{% endif %}
+{% if products %}
+	<h2>Products</h2>
+    <ul>
+    {% for product in products %}
+		<li><a href="/product/{{ product.id }}">{{ product.product_name }}</a></li>
+    {% endfor %}
+    </ul>
+{% endif %}
+<h2>Summary</h2>
+<p>{{ advisory.summary | safe }}</p>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+{% endblock %}

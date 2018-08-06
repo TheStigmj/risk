@@ -1,0 +1,45 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h1>Watchlist for {{ user }}</h1>
+	<h2>Products</h2>
+{% if products %}
+    <ul>
+    {% for product in products %}
+		<li><a href="{% url 'product:detail' product.id %}">{{ product.product_name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No products on watchlist.</p>
+{% endif %}
+	<h2>Customers</h2>
+{% if customers %}
+    <ul>
+    {% for customer in customers %}
+		<li><a href="{% url 'customer:detail' customer.id %}">{{ customer.customer_name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No customers on watchlist.</p>
+{% endif %}
+	<h2>Advisories</h2>
+{% if advisories %}
+    <ul>
+    {% for advisory in advisories %}
+		<li><a href="{% url 'advisory:detail' advisory.id %}">{{ advisory.advisory_id }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No advisories on watchlist.</p>
+{% endif %}
+	<h2>Assessments</h2>
+{% if assessments %}
+    <ul>
+    {% for assessment in assessments %}
+		<li><a href="{% url 'assessment:detail' assessment.id %}">{{ assessment }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No assessments on watchlist.</p>
+{% endif %}
+{% endblock %}

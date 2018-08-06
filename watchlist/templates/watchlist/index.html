@@ -1,0 +1,14 @@
+{% extends "base_generic.html" %}{% load watchlist_extras %}
+
+{% block content %}
+<h1>Watchlist for {{ user }}</h1>
+{% if object_list %}
+    <ul>
+    {% for object in object_list %}
+		<li class="risk-cl-watched{% if object.notificationtimestamp %}un{% endif %}seen">{{object.content_object.modified_date | date:"d.m.Y H:i:s" }} . . <span class="risk-cl-content_type">{{ object.content_type }}</span> . . <a href="/{{ object.content_type }}/{{ object.object_id }}/">{{ object.content_object }}</a> . . {% get_log_entry_with_user object.content_type object.object_id %}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No objects on watchlist.</p>
+{% endif %}
+{% endblock %}

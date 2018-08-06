@@ -1,0 +1,47 @@
+{% extends "base_generic.html" %}{% load risk_extras %}
+
+{% block content %}
+	<h1>Risks{% if customer %} for {{ customer.customer_name }}{% endif %}</h1>
+	{% if object_list %}<table class="table table-striped table-condensed">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Date</th>
+				<th>Advisory</th>
+				<th>Type</th>
+				<th>Vendor</th>
+				<th>Consequence</th>
+				<th>Probability</th>
+				<th>Risk</th>
+				<th>Title</th>
+			</tr>
+			<tr>
+				<td></td>
+				<td>{% if table_filter_date %}{{ table_filter_date }}{% endif %}</td>
+				<td></td>
+				<td></td>
+				<td>{% if table_filter_sir %}{{ table_filter_sir }}{% endif %}</td>
+				<td>{% if table_filter_consequence %}{{ table_filter_consequence }}{% endif %}</td>
+				<td>{% if table_filter_probability %}{{ table_filter_probability }}{% endif %}</td>
+				<td>{% if table_filter_risk %}{{ table_filter_risk }}{% endif %}</td>
+				<td></td>
+			</tr>
+		</thead>
+		<tbody>
+			{% for advisory in object_list %}{% if customer %}{% _get_risk as risk %}{% if risk > 5 or risk == -10 %}<tr>
+				<td>{{ forloop.counter }}</td>
+				<td>{{ advisory.content_object.last_updated | date:"d.m.Y" }}</td>
+				<td><a href="{% url 'advisory:detail' advisory.content_object.id %}">{{ advisory.content_object.advisory_id }}</a></td>
+				<td>Cisco</td>
+				<td class="{% get_matrix_class_from_name advisory.content_object.sir %}">{{ advisory.content_object.sir }}</td>
+				<td class="{% get_consequence_class %}">{% get_consequence %}</td>
+				<td class="{% get_probability_class %}">{% get_probability %}</td>
+				<td class="{% get_risk_class %}">{% get_risk %}</td>
+				<td>{{ advisory.content_object.advisory_title }}</td>
+			</tr>
+			{% endif %}{% endif %}{% endfor %}
+		</tbody>
+    </table>{% else %}
+    <p>No advisories are available.</p>
+{% endif %}
+{% endblock %}

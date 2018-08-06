@@ -1,0 +1,15 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h1>{{ object }}</h1>
+{% if form %}
+	<form action="{% url 'userprofile:edit' object.wlnumber %}" method="post">
+		{% csrf_token %}
+		<table class="table">
+			{{ form }}
+		</table>
+		<input type="submit" value="Submit" />
+	</form>
+{% endif %}
+
+{% endblock %}

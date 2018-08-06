@@ -1,0 +1,32 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<nav class="navbar navbar-default">
+	<div class="container-fluid">
+		<ul class="nav navbar-nav navbar-right">
+		{% if user.is_authenticated %}<li>{% if watchlist %}<a href="{% url 'watchlist:remove' modelid product.id %}">Remove from Watchlist</a>{% else %}<a href="{% url 'watchlist:add' modelid product.id %}">Add to Watchlist</a>{% endif %}</li>{% endif %}
+		</ul>
+	</div>
+</nav>
+	<h1>{{ product.product_name }}</h1>
+	{% if advisories %}
+		<h2>Advisories linked to this product</h2>
+		<ul>
+		{% for advisory in advisories %}
+			<li><a href="/advisory/{{ advisory.id }}">{{ advisory.advisory_id }}</a></li>
+		{% endfor %}
+		</ul>
+	{% else %}
+	<p>No advisories linked to this product</p>
+	{% endif %}
+	{% if user.is_authenticated %}{% if customers %}
+		<h2>Customers linked to this product</h2>
+		<ul>
+		{% for customer in customers %}
+			<li><a href="/customer/{{ customer.id }}">{{ customer.customer_name }}</a></li>
+		{% endfor %}
+		</ul>
+	{% else %}
+	<p>No customers linked to this product</p>
+	{% endif %}{% endif %}
+{% endblock %}

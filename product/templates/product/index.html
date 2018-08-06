@@ -1,0 +1,23 @@
+{% extends "base_generic.html" %}{% load product_extras %}
+
+{% block content %}
+<h1>All Products</h1>
+{% if object_list %}
+	{% define "" as lastvendor %}
+    <ul class="product_vendor">
+    {% for product in object_list %}
+	{% if product.product_vendor != lastvendor %}
+		{% if lastvendor != "" %}
+		</ul>
+		{% endif %}
+		<li><b>{{ product.product_vendor.vendor_name }}</b></li>
+		<ul class="product_list">
+	{% define product.product_vendor as lastvendor %}
+	{% endif %}
+		<li><a href="/product/{{ product.id }}/">{{ product.product_name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No products are available.</p>
+{% endif %}
+{% endblock %}

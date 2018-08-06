@@ -1,0 +1,45 @@
+2{% extends "base_generic.html" %}{% load assessment_extras %}
+{% block content %}
+	<h1>Assessments{% if customer %} for {{ customer.customer_name }}{% endif %}</h1>
+	{% if object_list %}<table class="table table-striped table-condensed">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Date</th>
+				<th>Advisory</th>
+				<th>Risk description</th>
+				<th>Consequence description</th>
+				<th>Consequence</th>
+				<th>Probability</th>
+				<th>Probability description</th>
+				<th>Risk</th>
+				<th>Action description</th>
+				<th>Consequence after action</th>
+				<th>Probability after action</th>
+				<th>Remaining risk</th>
+				<th>Mitigated</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for assessment in object_list %}<tr>
+				<td>{{ forloop.counter }}</td>
+				<td>{{ assessment.advisory.content_object.last_updated | date:"d.m.Y" }}</td>
+				<td><a href="{% url 'advisory:detail' assessment.advisory.id %}">{{ assessment.advisory.content_object.advisory_id }}</a></td>
+				<td>{{ assessment.risk_description }}</td>
+				<td>{{ assessment.consequence_description }}</td>
+				<td class="{% get_matrix_class assessment.consequence %}"><a href="{% url 'assessment:detail' assessment.id %}">{{ assessment.get_consequence_display }}</a></td>
+				<td class="{% get_matrix_class assessment.probability %}"><a href="{% url 'assessment:detail' assessment.id %}">{{ assessment.get_probability_display }}</a></td>
+				<td>{{ assessment.probability_description }}</td>
+				<td class="{% get_risk_class assessment.consequence assessment.probability %}">{% get_risk assessment.consequence assessment.probability %}</td>
+				<td>{{ assessment.action_description }}</td>
+				<td class="{% get_matrix_class assessment.consequence_after_action %}">{{ assessment.get_consequence_after_action_display }}</td>
+				<td class="{% get_matrix_class assessment.probability_after_action %}">{{ assessment.get_probability_after_action_display }}</td>
+				<td class="{% get_risk_class assessment.consequence_after_action assessment.probability_after_action %}">{% get_risk assessment.consequence_after_action assessment.probability_after_action %}</td>
+				<td>{{ assessment.mitigated_date | date:"d.m.Y" }}</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+    </table>{% else %}
+    <p>No assessments are available.</p>
+{% endif %}
+{% endblock %}

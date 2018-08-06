@@ -1,0 +1,35 @@
+{% extends "base_generic.html" %}{% load advisory_extras %}{% load risk_extras %}
+
+{% block content %}
+<h1>All advisories</h1>
+{% if latest_advisory_list %}
+	<table class="table table-condensed">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Updated</th>
+				<th>Published</th>
+				<th>ID</th>
+				<th>Title</th>
+				<th>Risk</th>
+				<th>Source</th>
+			</tr>
+		</thead>
+		<tbody>
+    {% for advisory in latest_advisory_list %}{% content_type advisory as advisory_ct %}
+			<tr>
+				<td>{{ forloop.counter }}</td>
+				<td>{{ advisory.content_object.last_updated | date:"d.m.Y" }}</td>
+				<td>{{ advisory.content_object.first_published | date:"d.m.Y" }}</td>
+				<td><a href="{% url 'advisory:detail' advisory.content_object.id %}">{{ advisory.content_object.advisory_id }}</a></td>
+				<td>{{ advisory.content_object.advisory_title }}</td>
+				<td>{{ advisory.content_object.sir }}</td>
+				<td>{% lookup_content_type advisory.content_type %}</td>
+			</tr>
+    {% endfor %}
+		</tbody>
+	</table>
+{% else %}
+    <p>No advisories are available.</p>
+{% endif %}
+{% endblock %}

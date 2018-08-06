@@ -1,0 +1,19 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<nav class="navbar navbar-default">
+	<div class="container-fluid">
+		<ul class="nav navbar-nav navbar-right">
+		{% if user.is_authenticated %}<li><a href="{% url 'userprofile:edit' object.wlnumber %}">Edit</a></li>{% endif %}
+		</ul>
+	</div>
+</nav>
+
+<h1>User profile for {{ user }}</h1>
+{% if object %}
+	<h2>Watchlist #{{object.wlnumber}}</h2>
+	Notification by {{ object.get_wlnotify_display }}{% if object.wlnotify == 1 %} to {{ object.wlemail }}{% elif object.wlnotify == 10 %} to {{ object.wlsms }}{% endif %}
+ {% else %}
+    <p>No profile available.</p>
+{% endif %}
+{% endblock %}

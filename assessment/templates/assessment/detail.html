@@ -1,0 +1,82 @@
+{% extends "base_generic.html" %}{% load assessment_extras %}
+
+{% block content %}
+<nav class="navbar navbar-default">
+	<div class="container-fluid">
+		<ul class="nav navbar-nav navbar-right">
+		{% if user.is_authenticated %}<li>{% if watchlist %}<a href="{% url 'watchlist:remove' modelid assessment.id %}">Remove from Watchlist</a>{% else %}<a href="{% url 'watchlist:add' modelid assessment.id %}">Add to Watchlist</a>{% endif %}</li>{% endif %}
+		{% if user.is_authenticated %}<li><a href="{% url 'assessment:edit' assessment.id %}">Edit</a></li>{% endif %}
+		</ul>
+	</div>
+</nav>
+
+<h1>{{ assessment.advisory.content_object.advisory_id }}</h1>
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Value</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Advisory</td>
+				<td><a href="{% url 'advisory:detail' assessment.advisory.content_object.id %}">{{ assessment.advisory.content_object.advisory_id }}</a></td>
+			</tr>
+			<tr>
+				<td>Vendor assessment</td>
+				<td class="">{{ assessment.advisory.content_object.sir }}</td>
+			</tr>
+			<tr>
+				<td>Customer</td>
+				<td>{{ assessment.customer.customer_name }}</td>
+			</tr>
+			<tr>
+				<td>Consequence</td>
+				<td class="{% get_matrix_class assessment.consequence %}">{{ assessment.get_consequence_display }}</td>
+			</tr>
+			<tr>
+				<td>Consequence description</td>
+				<td>{{ assessment.consequence_description }}</td>
+			</tr>
+			<tr>
+				<td>Probability</td>
+				<td class="{% get_matrix_class assessment.probability %}">{{ assessment.get_probability_display }}</td>
+			</tr>
+			<tr>
+				<td>Probability description</td>
+				<td>{{ assessment.probability_description }}</td>
+			</tr>
+			<tr>
+				<td>Risk</td>
+				<td class="{% get_risk_class assessment.consequence assessment.probability %}">{% get_risk assessment.consequence assessment.probability %}</td>
+			</tr>
+			<tr>
+				<td>Risk description</td>
+				<td>{{ assessment.risk_description }}</td>
+			</tr>
+			<tr>
+				<td>Action description</td>
+				<td>{{ assessment.action_description }}</td>
+			</tr>
+			<tr>
+				<td>Consequence after action</td>
+				<td class="{% get_matrix_class assessment.consequence_after_action %}">{{ assessment.get_consequence_after_action_display }}</td>
+			</tr>
+			<tr>
+				<td>Probability after action</td>
+				<td class="{% get_matrix_class assessment.probability_after_action %}">{{ assessment.get_probability_after_action_display }}</td>
+			</tr>
+			<tr>
+				<td>Risk after action</td>
+				<td class="{% get_risk_class assessment.consequence_after_action assessment.probability_after_action %}">{% get_risk assessment.consequence_after_action assessment.probability_after_action %}</td>
+			</tr>
+			<tr>
+				<td>Mitigated date</td>
+				<td>{{ assessment.mitigated_date | date:"d.m.Y" }}</td>
+			</tr>
+		</tbody>
+	</table>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+{% endblock %}
