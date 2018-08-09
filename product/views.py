@@ -10,7 +10,7 @@ class IndexView(generic.ListView):
 	template_name = 'product/index.html'
 	
 	def get_queryset(self):
-		return Product.objects.order_by('product_vendor__vendor_name', 'product_name')
+		return Product.objects.order_by('product_vendor__vendor_name', 'product_name').prefetch_related('product_vendor')
 
 class DetailView(generic.DetailView):
 	model = Product

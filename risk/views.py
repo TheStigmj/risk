@@ -71,14 +71,18 @@ class IndexView(generic.ListView):
 				assessment_filter = assessment_filter.filter(mitigated_date__lte=filter_date)
 				# And filter the queryset with the new whitelist
 				#queryset = queryset.filter(adv__product_names__in=whitelist).exclude(adv__assessment__in=assessment_filter).distinct()
-				queryset = queryset.filter(adv__product_names__in=whitelist).distinct()
+				queryset = queryset.filter(adv__product_names__in=whitelist).distinct().prefetch_related('content_object')
 
 		return queryset
 		
 	def get_context_data(self, **kwargs):
 		context = super(IndexView, self).get_context_data(**kwargs)
 
-		
+		context['table_filter_date'] = None
+		context['table_filter_sir'] = None
+		context['table_filter_consequence'] = None
+		context['table_filter_probability'] = None
+		context['table_filter_risk'] = None
 		# Are we looking at a specific customer?
 		if self._customer:
 			# Yes, so we'll add some contexts for use in the template
@@ -92,6 +96,8 @@ class IndexView(generic.ListView):
 			context['customer_selectform'] = CustomerSelectForm(initial={'customer': self._customer.id})
 		else:
 			context['customer_selectform'] = CustomerSelectForm()
+			context['customer'] = None
+			context['customer_id'] = None
 		return context
 
 	def get_form_kwargs(self):
